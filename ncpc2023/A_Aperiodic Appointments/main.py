@@ -44,7 +44,7 @@ def calculate_how_many_times_to_pay(N, K):
 
 if __name__ == "__main__":
     print("hi")
-    N, K = read_input("input/3.in")
+    N, K = read_input("input/2.in")
 
     print(f"N is {N}, K is {K}")
 
