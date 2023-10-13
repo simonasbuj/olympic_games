@@ -6,34 +6,50 @@ def read_input(file_path):
             return int(line.split()[0]), int(line.split()[1])
 
 
-def calculate_how_many_times_to_pay(N, K):
-    s = '0'
-    for n in range(2, N+1):
-        if n > K:
-            split_at_character_number = int(len(s) / K)
-            previous_patterns = [s[i:i+split_at_character_number] for i in range(0, len(s), split_at_character_number)]
+def are_all_values_in_list_the_same(list):
+    return all(i == list[0] for i in list)
 
-            if len(previous_patterns) > K:
-                s = s + '0'
-            elif all(i == previous_patterns[0] for i in previous_patterns):
-                print(previous_patterns)
-                print(all(i == previous_patterns[0] for i in previous_patterns))
-                print('-'*10)
-                s = s + '1'
-            else:
-                s = s + '0'
-        else:
-            s = s + '0'
-        print(s)
-    print(f"final: {s}")
+
+def split_string_at_character_numbers(string, how_many_parts):
+    split_at_character_number = int(len(string) / how_many_parts)
+    patterns = [string[i:i+split_at_character_number] for i in range(0, len(string), split_at_character_number)]
+    return patterns
+
+
+def find_matching_patterns(string, K):
+
+    s_reversed = string[::-1]
+
+    found_matching_pattern = False
+
+    for char_num in range(K, len(s_reversed) + 1, K):
+        patterns = split_string_at_character_numbers(s_reversed[:char_num], K)
+        are_values_the_same = are_all_values_in_list_the_same(patterns)
+        if (are_values_the_same):
+            found_matching_pattern = True
+            break
+
+    return '1' if found_matching_pattern else '0'
+
+
+def calculate_how_many_times_to_pay(N, K):
+
+    s = '0'
+
+    for n in range(2, N+1):
+        s = s + find_matching_patterns(s, K)
+
+    return s.count('1')
+
 
 if __name__ == "__main__":
     print("hi")
-    N, K = read_input("input/1.in")
+    N, K = read_input("input/3.in")
 
     print(f"N is {N}, K is {K}")
-    calculate_how_many_times_to_pay(N, K)
 
-    my_string = '001'
-    n = int(len(my_string) / 2)
-    #print([my_string[i:i+n] for i in range(0, len(my_string), n)])
+    answer = calculate_how_many_times_to_pay(N, K)
+
+    print(f"answer is {answer}")
+    
+
